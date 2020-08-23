@@ -653,7 +653,7 @@ InferenceEngine::Core& getCore(const std::string& id)
 #endif
 
 #if !defined(OPENCV_DNN_IE_VPU_TYPE_DEFAULT)
-static bool detectMyriadX_()
+static bool detectMyriadX_()  // checkomar add "HDDL" and "MYRIAD" as an argument to this function: the argument could be one of the capital letters constants, maybe named targetID or device
 {
     AutoLock lock(getInitializationMutex());
 #if INF_ENGINE_VER_MAJOR_GE(INF_ENGINE_RELEASE_2019R3)
@@ -665,6 +665,7 @@ static bool detectMyriadX_()
         if (i->find("MYRIAD") != std::string::npos)
         {
             const std::string name = ie.GetMetric(*i, METRIC_KEY(FULL_DEVICE_NAME)).as<std::string>();
+            // checkomar if statement here to check the passed argument (device), because the following two lines will change accordingly.
             CV_LOG_INFO(NULL, "Myriad device: " << name);
             return name.find("MyriadX") != std::string::npos  || name.find("Myriad X") != std::string::npos;
         }
@@ -1150,9 +1151,9 @@ void resetMyriadDevice()
 }
 
 #ifdef HAVE_INF_ENGINE
-bool isMyriadX()
+bool isMyriadX()  // checkomar considering hddl and myriad are all myriadx
 {
-     static bool myriadX = getInferenceEngineVPUType() == CV_DNN_INFERENCE_ENGINE_VPU_TYPE_MYRIAD_X;
+     static bool myriadX = getInferenceEngineVPUType() == CV_DNN_INFERENCE_ENGINE_VPU_TYPE_MYRIAD_X;  // checkomar || getInferenceEngineVPUType() == CV_DNN_INFERENCE_ENGINE_VPU_TYPE_MYRIAD_X
      return myriadX;
 }
 
@@ -1167,7 +1168,7 @@ static std::string getInferenceEngineVPUType_()
         CV_LOG_INFO(NULL, "OpenCV-DNN: running Inference Engine VPU autodetection: Myriad2/X. In case of other accelerator types specify 'OPENCV_DNN_IE_VPU_TYPE' parameter");
         try {
             bool isMyriadX_ = detectMyriadX_();
-            if (isMyriadX_)
+            if (isMyriadX_)  // checkomar add if (isHDDL_) before the if (isMyriadX_) statement
             {
                 param_vpu_type = CV_DNN_INFERENCE_ENGINE_VPU_TYPE_MYRIAD_X;
             }

@@ -474,7 +474,7 @@ TEST_P(DNNTestNetwork, DenseNet_121)
         lInf = 0.05;
     }
     processNet("dnn/DenseNet_121.caffemodel", "dnn/DenseNet_121.prototxt", Size(224, 224), "", "", l1, lInf);
-    if (target != DNN_TARGET_MYRIAD || getInferenceEngineVPUType() != CV_DNN_INFERENCE_ENGINE_VPU_TYPE_MYRIAD_X)
+    if (target != DNN_TARGET_MYRIAD || getInferenceEngineVPUType() != CV_DNN_INFERENCE_ENGINE_VPU_TYPE_MYRIAD_X)  // checkomar not sure to add && or || between MYRIAD and HDDL
         expectNoFallbacksFromIE(net);
     expectNoFallbacksFromCUDA(net);
 }
